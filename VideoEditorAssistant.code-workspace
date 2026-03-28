@@ -1,0 +1,40 @@
+{
+  "folders": [
+    {
+      "name": "LivePlan",
+      "path": ".",
+    },
+  ],
+  "settings": {
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "editor.rulers": [100],
+    "editor.formatOnSave": true,
+    "editor.snippetSuggestions": "top",
+    "eslint.codeActionsOnSave.mode": "problems",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "files.exclude": {},
+    "tailwindCSS.includeLanguages": {
+      "typescriptreact": "html",
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+    },
+    "[xml]": {
+      "editor.defaultFormatter": "DotJoshJohnson.xml",
+    },
+  },
+  "extensions": {
+    "recommendations": [
+      "rebornix.project-snippets",
+      "dbaeumer.vscode-eslint",
+      "orta.vscode-jest",
+      "esbenp.prettier-vscode",
+      "ms-vsliveshare.vsliveshare",
+      "styled-components.vscode-styled-components",
+      "tyriar.sort-lines",
+      "bradlc.vscode-tailwindcss",
+    ],
+  },
+}
