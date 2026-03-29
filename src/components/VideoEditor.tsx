@@ -41,26 +41,22 @@ export default function VideoEditor() {
             />
 
             {previewURL && (
-                <video
-                    src={previewURL}
-                    controls
-                    className="w-full rounded-md border border-border"
-                />
+                <video src={previewURL} controls className="w-full rounded-md border border-border" />
             )}
 
             {videoFile && (
-                <div className="flex  flex-col gap-4">
+                <div className="flex flex-col gap-4">
                     {/* Mode toggle */}
                     <div className="flex gap-2">
                         <button
                             onClick={() => setMode('remove')}
-                            className={`px-3 py-1.5 rounded-md text-sm font-medium border ${mode === 'remove' ? 'bg-accent text-white border-accent' : 'border-border text-text'}`}
+                            className={`btn ${mode === 'remove' ? 'btn-primary' : 'btn-outline'}`}
                         >
                             Delete section
                         </button>
                         <button
                             onClick={() => setMode('trim')}
-                            className={`px-3 py-1.5 rounded-md text-sm font-medium border ${mode === 'trim' ? 'bg-accent text-white border-accent' : 'border-border text-text'}`}
+                            className={`btn ${mode === 'trim' ? 'btn-primary' : 'btn-outline'}`}
                         >
                             Trim video
                         </button>
@@ -76,13 +72,13 @@ export default function VideoEditor() {
                     <div className="flex gap-2">
                         <button
                             onClick={() => setQuality('fast')}
-                            className={`px-3 py-1.5 rounded-md text-sm font-medium border ${quality === 'fast' ? 'bg-accent text-white border-accent' : 'border-border text-text'}`}
+                            className={`btn ${quality === 'fast' ? 'btn-primary' : 'btn-outline'}`}
                         >
                             Fast
                         </button>
                         <button
                             onClick={() => setQuality('accurate')}
-                            className={`px-3 py-1.5 rounded-md text-sm font-medium border ${quality === 'accurate' ? 'bg-accent text-white border-accent' : 'border-border text-text'}`}
+                            className={`btn ${quality === 'accurate' ? 'btn-primary' : 'btn-outline'}`}
                         >
                             Accurate (slow)
                         </button>
@@ -114,7 +110,7 @@ export default function VideoEditor() {
                     <button
                         onClick={handleProcess}
                         disabled={isWorking}
-                        className="w-fit px-4 py-2 rounded-md bg-accent text-white text-sm font-medium disabled:opacity-50"
+                        className="btn btn-primary px-4 py-2 w-fit"
                     >
                         {status === 'loading' && 'Loading FFmpeg…'}
                         {status === 'processing' && `Processing… ${progress}%`}
@@ -136,7 +132,7 @@ export default function VideoEditor() {
                     <a
                         href={outputURL}
                         download="edited.mp4"
-                        className="w-fit px-4 py-2 rounded-md border border-accent text-accent text-sm font-medium"
+                        className="btn btn-outline px-4 py-2 w-fit border-accent text-accent hover:bg-accent hover:text-white"
                     >
                         Download edited video
                     </a>

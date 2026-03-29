@@ -55,7 +55,12 @@ export function useFFmpeg() {
 
     // trimVideo() modifies a video file to only include what's between the start/end times. It returns
     // a URL pointing to the new video file.
-    async function trimVideo(file: File, startSec: number, endSec: number, quality: FFmpegQuality = 'fast'): Promise<string> {
+    async function trimVideo(
+        file: File,
+        startSec: number,
+        endSec: number,
+        quality: FFmpegQuality = 'fast'
+    ): Promise<string> {
         const ffmpeg = ffmpegRef.current
         if (!ffmpeg) throw new Error('FFmpeg is not loaded')
 
@@ -66,11 +71,35 @@ export function useFFmpeg() {
 
         if (quality === 'accurate') {
             // Re-encode with libx264 — frame-accurate cuts but slower.
-            await ffmpeg.exec(['-ss', String(startSec), '-to', String(endSec), '-i', 'input.mp4', '-c:v', 'libx264', '-c:a', 'aac', 'output.mp4'])
+            await ffmpeg.exec([
+                '-ss',
+                String(startSec),
+                '-to',
+                String(endSec),
+                '-i',
+                'input.mp4',
+                '-c:v',
+                'libx264',
+                '-c:a',
+                'aac',
+                'output.mp4',
+            ])
         } else {
             // -c copy skips re-encoding (fast), -avoid_negative_ts make_zero fixes
             // the timestamp gap that causes choppiness at the start of the clip.
-            await ffmpeg.exec(['-ss', String(startSec), '-to', String(endSec), '-i', 'input.mp4', '-c', 'copy', '-avoid_negative_ts', 'make_zero', 'output.mp4'])
+            await ffmpeg.exec([
+                '-ss',
+                String(startSec),
+                '-to',
+                String(endSec),
+                '-i',
+                'input.mp4',
+                '-c',
+                'copy',
+                '-avoid_negative_ts',
+                'make_zero',
+                'output.mp4',
+            ])
         }
 
         // Read the output file back out of the virtual filesystem as a Uint8Array,
@@ -84,7 +113,12 @@ export function useFFmpeg() {
 
     // removeSection() cuts out the segment between startSec and endSec, then
     // joins the two remaining pieces and returns a URL for the result.
-    async function removeSection(file: File, startSec: number, endSec: number, quality: FFmpegQuality = 'fast'): Promise<string> {
+    async function removeSection(
+        file: File,
+        startSec: number,
+        endSec: number,
+        quality: FFmpegQuality = 'fast'
+    ): Promise<string> {
         const ffmpeg = ffmpegRef.current
         if (!ffmpeg) throw new Error('FFmpeg is not loaded')
 
@@ -93,12 +127,22 @@ export function useFFmpeg() {
 
         await ffmpeg.writeFile('input.mp4', await fetchFile(file))
 
-        const codecArgs = quality === 'accurate'
-            ? ['-c:v', 'libx264', '-c:a', 'aac']
-            : ['-c', 'copy', '-avoid_negative_ts', 'make_zero']
+        const codecArgs =
+            quality === 'accurate'
+                ? ['-c:v', 'libx264', '-c:a', 'aac']
+                : ['-c', 'copy', '-avoid_negative_ts', 'make_zero']
 
         // Step 1: extract everything before the cut
-        await ffmpeg.exec(['-ss', '0', '-to', String(startSec), '-i', 'input.mp4', ...codecArgs, 'part1.mp4'])
+        await ffmpeg.exec([
+            '-ss',
+            '0',
+            '-to',
+            String(startSec),
+            '-i',
+            'input.mp4',
+            ...codecArgs,
+            'part1.mp4',
+        ])
 
         // Step 2: extract everything after the cut (-ss with no -to runs to the end)
         await ffmpeg.exec(['-ss', String(endSec), '-i', 'input.mp4', ...codecArgs, 'part2.mp4'])
