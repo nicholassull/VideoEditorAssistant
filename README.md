@@ -23,6 +23,18 @@ A browser-based video editor built with React and FFmpeg.wasm. All processing ru
 
 **Prerequisites:** Node.js installed ([nodejs.org](https://nodejs.org) or `brew install node` on Mac)
 
+**1. Set up environment variables**
+
+Copy the example env file and add your API key:
+
+```bash
+cp .env.example .env
+```
+
+Then open `.env` and replace the placeholder with your Deepgram API key (ask Nick for the API key).
+
+**2. Install dependencies and start the dev server**
+
 ```bash
 npm install
 npm run dev
