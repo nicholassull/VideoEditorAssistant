@@ -1,49 +1,52 @@
-import { useState } from 'react'
-import { useFFmpeg, type FFmpegQuality } from '@/hooks/useFFmpeg'
-import FilePicker from '@/components/FilePicker'
+import { useState } from 'react';
+import { useFFmpeg, type FFmpegQuality } from '@/hooks/useFFmpeg';
+import FilePicker from '@/components/FilePicker';
+import { useSpeechToText } from '@/hooks/useSpeechToText';
+import { TranscriptionControls } from './TranscriptionControls';
 
-type Mode = 'trim' | 'remove'
+type Mode = 'trim' | 'remove';
 
 export default function VideoEditor() {
-    const { load, trimVideo, removeSection, status, progress, errorMessage } = useFFmpeg()
+    const { load, trimVideo, removeSection, status, progress, errorMessage } = useFFmpeg();
 
-    const [videoFile, setVideoFile] = useState<File | null>(null)
-    const [previewURL, setPreviewURL] = useState<string | null>(null)
-    const [outputURL, setOutputURL] = useState<string | null>(null)
-    const [startSec, setStartSec] = useState(0)
-    const [endSec, setEndSec] = useState(10)
-    const [mode, setMode] = useState<Mode>('remove')
-    const [quality, setQuality] = useState<FFmpegQuality>('fast')
+    const [videoFile, setVideoFile] = useState<File | null>(null);
+    const [previewURL, setPreviewURL] = useState<string | null>(null);
+    const [outputURL, setOutputURL] = useState<string | null>(null);
+    const [startSec, setStartSec] = useState(0);
+    const [endSec, setEndSec] = useState(10);
+    const [mode, setMode] = useState<Mode>('remove');
+    const [quality, setQuality] = useState<FFmpegQuality>('fast');
 
     async function handleProcess() {
-        if (!videoFile) return
-        if (status === 'idle') await load()
+        if (!videoFile) return;
+        if (status === 'idle') await load();
         const url =
             mode === 'remove'
                 ? await removeSection(videoFile, startSec, endSec, quality)
-                : await trimVideo(videoFile, startSec, endSec, quality)
-        setOutputURL(url)
+                : await trimVideo(videoFile, startSec, endSec, quality);
+        setOutputURL(url);
     }
 
-    const isWorking = status === 'loading' || status === 'processing'
+    const isWorking = status === 'loading' || status === 'processing';
 
     return (
         <div className="flex flex-col gap-6 p-8 text-left">
             <h1 className="text-2xl font-semibold text-text-heading">Video Editor</h1>
-
             <FilePicker
                 file={videoFile}
                 onChange={(file) => {
-                    setVideoFile(file)
-                    setOutputURL(null)
-                    setPreviewURL(URL.createObjectURL(file))
+                    setVideoFile(file);
+                    setOutputURL(null);
+                    setPreviewURL(URL.createObjectURL(file));
                 }}
             />
-
             {previewURL && (
-                <video src={previewURL} controls className="w-full rounded-md border border-border" />
+                <video
+                    src={previewURL}
+                    controls
+                    className="w-full rounded-md border border-border"
+                />
             )}
-
             {videoFile && (
                 <div className="flex flex-col gap-4">
                     {/* Mode toggle */}
@@ -120,7 +123,6 @@ export default function VideoEditor() {
                     {errorMessage && <p className="text-sm text-red-500">{errorMessage}</p>}
                 </div>
             )}
-
             {outputURL && (
                 <div className="flex flex-col gap-2">
                     <p className="text-sm text-text">Done! Preview or download below.</p>
@@ -138,6 +140,8 @@ export default function VideoEditor() {
                     </a>
                 </div>
             )}
+            {/* Transcription */}
+            {videoFile && <TranscriptionControls file={videoFile} />}
         </div>
-    )
+    );
 }
