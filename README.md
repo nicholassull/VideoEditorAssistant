@@ -43,3 +43,7 @@ npm run dev
 Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
 > **Note:** FFmpeg core binaries (~30MB) are loaded from CDN on first use. The app requires a browser that supports SharedArrayBuffer (Chrome, Edge, or Firefox with cross-origin isolation).
+
+## Sample Videos
+
+`src/assets/sample-videos/` contains sample videos for testing functionality. Do not overwrite or delete these files.
